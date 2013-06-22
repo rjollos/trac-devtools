@@ -1,0 +1,17 @@
+#!/bin/sh
+
+mkdir $1
+cd $1
+
+#svn co https://svn.apache.org/repos/asf/bloodhound/tags/0.5.3 bloodhound
+svn co https://svn.apache.org/repos/asf/bloodhound/trunk bloodhound
+#git clone https://github.com/apache/bloodhound.git
+virtualenv bh
+. bh/bin/activate
+cd bloodhound/installer
+pip install -r requirements-dev.txt
+#pip install -r requirements.txt
+
+python bloodhound_setup.py --project=sqlite --database-type=sqlite --admin-user=admin --admin-password=admin
+
+echo "tracd -r --port=8000 bloodhound/environments/sqlite"
