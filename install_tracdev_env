@@ -4,8 +4,9 @@
 # TODO: use trac-trunk as default, use python-2.6 as default
 install_dir=$1
 trac_src=$2     #location of trac source code relative to this script
-python=$3
+python_ver=$3
 
+root_dir=`pwd`
 install_dir_abs=`pwd`/$install_dir
 genshi_src=genshi.git
 tracdevplugin_src=tracdeveloperplugin/trunk
@@ -17,35 +18,85 @@ tracenv=tracdev  #name of Trac environment to create
 
 #TODO: check if $installdir already exists and exit if yes
 
-#TODO: add option to specify python version
-echo Creating the virtualenv
-virtualenv --system-site-packages --python=/usr/bin/python2.7 $install_dir
-source $install_dir/bin/activate
+mkdir $install_dir
+cp -r $trac_src_dir $install_dir_abs/
+cp -r $genshi_src_dir $install_dir_abs/
+#cp -r $tracdevplugin_src_dir $install_dir_abs/
 
-# TODO: error check for available sources
-echo Installing Trac and Genshi
-cp -r $trac_src_dir $install_dir/
-cp -r $genshi_src_dir $install_dir/
-#cp -r $tracdevplugin_src_dir $install_dir/
-cd $install_dir/$genshi_src_dir
-python setup.py develop >&2
-cd -
-cd $install_dir/$trac_src_dir
-python setup.py develop >&2
-cd -
+function create_virtualenv {
+    cd $install_dir_abs
+    python_ver=$1
+    echo Installing virtual environment for Python $python_ver
+    virtualenv --system-site-packages --python=/usr/bin/python$python_ver $install_dir_abs/py$python_ver > /dev/null
+    #virtualenv --python=/usr/bin/python$python_ver $install_dir_abs
+    source py$python_ver/bin/activate
+
+    # TODO: error check for available sources
+
+    echo Installing Pytz
+    cd $root_dir/pytz-2013d
+    python setup.py install > /dev/null 2>&1
+    echo Installing Babel
+    cd $root_dir/babel-0.9.6
+    python setup.py install > /dev/null 2>&1
+    echo Installing Trac and Genshi
+    cd $install_dir_abs/$genshi_src_dir
+    python setup.py develop > /dev/null 2>&1
+    cd - > /dev/null 2>&1
+    cd $install_dir_abs/$trac_src_dir
+    python setup.py develop > /dev/null 2>&1
+    cd - > /dev/null 2>&1
+
+    echo Installing Twill
+    cd $root_dir/twill-0.9
+    python setup.py install > /dev/null 2>&1
+    echo Installing Pygments
+    cd $root_dir/pygments
+    python setup.py install > /dev/null 2>&1
+    echo Installing docutils
+    cd $root_dir/docutils/docutils
+    python setup.py install > /dev/null 2>&1
+    echo Installing CofigObj
+    cd $root_dir/configobj-4.7.2
+    python setup.py install > /dev/null 2>&1
+    echo Installing lxml
+    cd $root_dir/lxml-3.3.3
+    make build > /dev/null
+    python setup.py install > /dev/null 2>&1
+
+    cd $install_dir_abs/py$python_ver/lib/python$python_ver/site-packages/
+    ln -s /usr/share/pyshared/svn .
+    ln -s /usr/share/pyshared/libsvn .
+    echo "/usr/lib/pyshared/python$python_ver/libsvn" > svn.pth
+    cd $install_dir_abs
+}
+
+create_virtualenv 2.5
+create_virtualenv 2.6
+create_virtualenv 2.7
 
 echo Creating the Trac environment
-cd $install_dir
-REPOS=`pwd`/repos/tracdev
-trac-admin tracdev initenv TracDev sqlite:db/trac.db svn $REPOS >&2
-trac-admin tracdev permission add anonymous TRAC_ADMIN >&2
+cd $install_dir_abs
+REPOS=$install_dir_abs/repos/tracdev
+trac-admin tracdev initenv TracDev sqlite:db/trac.db svn $REPOS >& /dev/null
+trac-admin tracdev permission add anonymous TRAC_ADMIN > /dev/null
+
+trac-admin tracdev config set components tracopt.versioncontrol.svn.* enabled
+trac-admin tracdev config set components tracopt.versioncontrol.git.* enabled
+
+trac-admin tracdev config set notification smtp_enabled true
+trac-admin tracdev config set notification smtp_server smtp.gmail.com
+trac-admin tracdev config set notification smtp_port 587
+trac-admin tracdev config set notification smtp_user ryan.j.ollos@gmail.com
+trac-admin tracdev config set notification smtp_password M44hafay
+trac-admin tracdev config set notification use_tls true
 
 echo Adding authentication information
 htpasswd -bc $tracenv/.htpasswd user1 user1
 htpasswd -b $tracenv/.htpasswd user2 user2
 echo Creating user 'user1' with password 'user1'
 echo Creating user 'user2' with password 'user2'
-cd -
+cd - > /dev/null
 
 #echo Installing the TracDeveloperPlugin
 #cd $tracdevplugin_src_dir
@@ -53,14 +104,14 @@ cd -
 #cd -
 
 echo Creating the SVN repository
-cd $install_dir
+cd $install_dir_abs
 mkdir repos
 svnadmin create repos/$tracenv
 svn co file:///`pwd`/repos/$tracenv workingcopy
-cd -
 
-echo Change directories to $install_dir
+echo Change directories to $install_dir_abs
 echo Switch to the virtualenv using the command 'source bin/activate'
 echo Start Trac with the command:
 echo 'tracd -r -p 8000 --basic-auth="tracdev,`pwd`/tracdev/.htpasswd,TracDev Env" tracdev'
 echo Navigate to http://localhost:8000/tracdev
+

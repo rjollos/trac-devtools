@@ -1,14 +1,16 @@
 #!/bin/sh
 
-mkdir $1
-cd $1
+bh_src=$2
+mkdir "$1"
+cp -R "$bh_src" "$1"/
+cd "$1"
 
 #svn co https://svn.apache.org/repos/asf/bloodhound/tags/0.5.3 bloodhound
-svn co https://svn.apache.org/repos/asf/bloodhound/trunk bloodhound
+#svn co https://svn.apache.org/repos/asf/bloodhound/trunk bloodhound
 #git clone https://github.com/apache/bloodhound.git
-virtualenv bh
-. bh/bin/activate
-cd bloodhound/installer
+virtualenv --python=python2.7 .
+. bin/activate
+cd "$bh_src"/installer
 pip install -r requirements-dev.txt
 #pip install -r requirements.txt
 

@@ -1,5 +1,5 @@
 In svn.pth:
-usr/lib/pyshared/python2.7/libsvn
+/usr/lib/pyshared/python2.7/libsvn
 
 link in lib/python2.7/site-packages:
 svn -> /usr/share/pyshared/svn
