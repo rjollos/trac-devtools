@@ -60,7 +60,7 @@ function create_virtualenv {
     cd $root_dir/configobj-4.7.2
     python setup.py install > /dev/null 2>&1
     echo Installing lxml
-    cd $root_dir/lxml-3.3.3
+    cd $root_dir/lxml-3.3.5
     make build > /dev/null
     python setup.py install > /dev/null 2>&1
 
