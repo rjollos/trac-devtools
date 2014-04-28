@@ -27,7 +27,7 @@ function create_virtualenv {
     cd $install_dir_abs
     python_ver=$1
     echo Installing virtual environment for Python $python_ver
-    virtualenv --system-site-packages --python=/usr/bin/python$python_ver $install_dir_abs/py$python_ver > /dev/null
+    virtualenv --python=/usr/bin/python$python_ver $install_dir_abs/py$python_ver > /dev/null
     #virtualenv --python=/usr/bin/python$python_ver $install_dir_abs
     source py$python_ver/bin/activate
 
