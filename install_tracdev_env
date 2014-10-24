@@ -8,11 +8,13 @@ python_ver=$3
 
 root_dir=`pwd`
 install_dir_abs=`pwd`/$install_dir
-genshi_src=genshi.git
+genshi_src=Genshi-0.7
 tracdevplugin_src=tracdeveloperplugin/trunk
 tracdevplugin_src_dir=$tracdevplugin_src
 trac_src_dir=$trac_src
 genshi_src_dir=$genshi_src
+pygments=Pygments-1.6
+virtualenv=virtualenv-1.11.6
 
 tracenv=tracdev  #name of Trac environment to create
 
@@ -27,17 +29,17 @@ function create_virtualenv {
     cd $install_dir_abs
     python_ver=$1
     echo Installing virtual environment for Python $python_ver
-    virtualenv --python=/usr/bin/python$python_ver $install_dir_abs/py$python_ver > /dev/null
+    $root_dir/$virtualenv/virtualenv.py --python=/usr/bin/python$python_ver $install_dir_abs/py$python_ver > /dev/null
     #virtualenv --python=/usr/bin/python$python_ver $install_dir_abs
     source py$python_ver/bin/activate
 
     # TODO: error check for available sources
 
     echo Installing Pytz
-    cd $root_dir/pytz-2013d
+    cd $root_dir/pytz-2014.4
     python setup.py install > /dev/null 2>&1
     echo Installing Babel
-    cd $root_dir/babel-0.9.6
+    cd $root_dir/babel.git
     python setup.py install > /dev/null 2>&1
     echo Installing Trac and Genshi
     cd $install_dir_abs/$genshi_src_dir
@@ -51,13 +53,13 @@ function create_virtualenv {
     cd $root_dir/twill-0.9
     python setup.py install > /dev/null 2>&1
     echo Installing Pygments
-    cd $root_dir/pygments
+    cd $root_dir/$pygments
     python setup.py install > /dev/null 2>&1
     echo Installing docutils
-    cd $root_dir/docutils/docutils
+    cd $root_dir/docutils-0.12/docutils
     python setup.py install > /dev/null 2>&1
     echo Installing CofigObj
-    cd $root_dir/configobj-4.7.2
+    cd $root_dir/configobj-5.0.5
     python setup.py install > /dev/null 2>&1
     echo Installing lxml
     cd $root_dir/lxml-3.3.5
