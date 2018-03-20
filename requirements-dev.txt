@@ -1,0 +1,19 @@
+pip
+wheel
+setuptools
+MySQL-python
+PyMySQL
+psycopg2-binary
+mercurial
+pygments
+textile
+ConfigObj  # Trac 1.0.x only
+pytz
+docutils
+coverage
+twill==0.9.1
+lxml
+babel
+genshi
+jinja2
+bpython
