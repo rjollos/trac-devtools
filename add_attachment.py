@@ -1,37 +1,20 @@
 #!/usr/bin/env python
 
 import argparse
-import subprocess
 import sys
 
 import xmlrpclib
-
-trac_url = 'https://rjollos:%s@trac-hacks.org/login/rpc'
+import utils
 
 
 def main(ticket_id, filename):
-    passwd = get_lp_password()
+    passwd = utils.get_lp_password()
     if passwd is None:
         sys.exit(1)
-    server = xmlrpclib.ServerProxy(trac_url % passwd)
+    server = xmlrpclib.ServerProxy(utils.trac_url % passwd)
     with open(filename) as f:
         file = xmlrpclib.Binary(f.read())
         server.ticket.putAttachment(ticket_id, filename, '', file)
-
-
-def get_lp_password():
-    proc = subprocess.Popen(['lpass', 'show', '--sync', 'no', '--password',
-                             'Edgewall/trac-hacks.org'],
-                            stdin=subprocess.PIPE,
-                            stdout=subprocess.PIPE,
-                            stderr=subprocess.PIPE)
-    stdout, stderr = proc.communicate()
-    proc.stdout.close()
-    proc.stderr.close()
-    if proc.returncode == 0:
-        return stdout.strip()
-    else:
-        print('ERROR: ', stderr)
 
 
 if __name__ == '__main__':
