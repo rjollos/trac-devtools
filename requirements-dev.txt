@@ -16,4 +16,7 @@ lxml
 babel
 genshi
 jinja2
+transifex-client
 bpython
+autopep8
+sphinx
