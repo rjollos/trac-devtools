@@ -20,3 +20,5 @@ transifex-client
 bpython
 autopep8
 sphinx
+epydoc
+

@@ -1,21 +1,29 @@
 #!/usr/bin/env sh
 
-pve=${1:-pve}
-if [[ ! -d $pve ]]; then
-    python2.7 -m virtualenv pve
-    source pve/bin/activate
+if [[ -L "$0" ]]; then
+    DIR=$(dirname "$(readlink "$0")")
+else
+    DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 fi
 
-pip install -U -r requirements-dev.txt
+if [[ $(pyenv version-name) == 'system' ]]; then
+    echo "No pyenv activated"
+    exit 1
+fi
+#pve=${1:-pve}
+#if [[ ! -d $pve ]]; then
+#    python2.7 -m virtualenv pve
+#    source pve/bin/activate
+#fi
+
+pip install -U -r $DIR/trac-requirements-dev.txt
+pip install -U -r teo-rjollos.git/requirements-release.txt
 
 svn_python=$(locate -l 1 svn-python) > /dev/null
-site_packages="$pve/lib/python2.7/site-packages"
-
-# Remove invalid symbolic links.
-find "$site_packages/svn" -type l ! -exec test -e {} \; -exec rm {} \;
-find "$site_packages/libsvn" -type l ! -exec test -e {} \; -exec rm {} \; -exec rm "$site_packages/svn.pth" \;
+site_packages=$(python -c "import os; print(os.path.dirname(os.__file__) + '/site-packages')")
+echo $site_packages
 
 # Create new symbolic links
-[ ! -h "$site_packages/svn" ] && ln -s "$svn_python/svn" "$site_packages/"
-[ ! -h "$site_packages/libsvn" ] && ln -s "$svn_python/libsvn" "$site_packages/"
-[ ! -f "$site_packages/svn.pth" ] &&  echo "$svn_python/libsvn" > "$site_packages/svn.pth"
+ln -sf "$svn_python/svn" "$site_packages/"
+ln -sf "$svn_python/libsvn" "$site_packages/"
+echo "$svn_python/libsvn" > "$site_packages/svn.pth"

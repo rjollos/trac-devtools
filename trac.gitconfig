@@ -1,0 +1,43 @@
+[alias]
+    update-tracking = "!git fetch mirror; branch=$(git symbolic-ref --short HEAD); for b in 1.0-stable 1.2-stable trunk; do git checkout -q $b && git rebase mirror/$b; done; git checkout -q $branch"
+    cl = clean -xdf --exclude=Makefile.cfg
+[color "diff"]
+    whitespace = red reverse
+[pull]
+    ff = only
+    rebase = true
+[user]
+    email = ryan.j.ollos@gmail.com
+    name = Ryan J Ollos
+[travis]
+    slug = edgewall/trac
+[remote "mirror"]
+    url = https://svn.edgewall.org/git/trac/mirror
+    fetch = +refs/heads/*:refs/remotes/mirror/*
+    pushurl = no_push
+[remote "origin"]
+    url = https://svn.edgewall.org/git/trac/mirror
+    pushurl = https://rjollos@svn.edgewall.org/git/trac/devs/rjollos
+    fetch = +refs/heads/*:refs/remotes/origin/*
+[remote "jomae"]
+    url = https://svn.edgewall.org/git/trac/devs/jomae
+    fetch = +refs/heads/*:refs/remotes/jomae/*
+[remote "cboos"]
+    url = https://svn.edgewall.org/git/trac/devs/cboos
+    fetch = +refs/heads/*:refs/remotes/cboos/*
+[remote "psuter"]
+    url = https://svn.edgewall.org/git/trac/devs/psuter
+    fetch = +refs/heads/*:refs/remotes/psuter/*
+[remote "rjollos-github"]
+    url = https://github.com/rjollos/trac.git
+    fetch = +refs/heads/*:refs/remotes/rjollos/*
+[remote "jomae-github"]
+    url = https://github.com/jun66j5/trac.git
+    fetch = +refs/heads/*:refs/remotes/jomae-github/*
+[remote "github"]
+    url = https://github.com/edgewall/trac.git
+    fetch = +refs/heads/*:refs/remotes/github/*
+    pushurl = no_push
+[remote "timgraham"]
+    url = https://github.com/timgraham/trac.git
+    fetch = +refs/heads/*:refs/remotes/timgraham/*

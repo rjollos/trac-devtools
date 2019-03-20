@@ -1,0 +1,56 @@
+[user]
+	name = Ryan J Ollos
+	email = ryan.j.ollos@gmail.com
+[credential]
+	helper = !aws codecommit credential-helper $@
+	UseHttpPath = true
+[difftool]
+	prompt = false
+[diff]
+        wsErrorHighlight = all
+	tool = p4mergetool
+[core]
+	editor = vim
+	excludesfile = /Users/rjollos/.gitignore_global
+	autocrlf = input
+[push]
+	default = simple
+[alias]
+	co = checkout
+	cp = cherry-pick
+	cpx = cherry-pick -x
+	st = status -sb
+	logo = log --oneline
+	logf = log --first-parent
+	logg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+	elog = log -1 --format='%B'
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 
+[mergetool "sourcetree"]
+	cmd = /Users/rjollos/Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
+[commit]
+	template = /Users/rjollos/.stCommitMsg
+[color "diff"]
+	whitespace = red reverse
+[merge]
+	tool = p4mergetool
+[mergetool "p4mergetool"]
+	cmd = /Applications/p4merge.app/Contents/Resources/launchp4merge /Users/rjollos/ /Users/rjollos/ /Users/rjollos/ /Users/rjollos/
+	trustExitCode = false
+[mergetool]
+	keepBackup = false
+[difftool "p4mergetool"]
+	cmd = /Applications/p4merge.app/Contents/Resources/launchp4merge $LOCAL $REMOTE
+[filter "lfs"]
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f
+[icdiff]
+	options = --highlight --line-numbers
+[grep]
+	extendedRegexp = true
+[pull]
+	rebase = true
