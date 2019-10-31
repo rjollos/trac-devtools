@@ -1,5 +1,5 @@
 [alias]
-    update-tracking = "!git fetch mirror; branch=$(git symbolic-ref --short HEAD); for b in 1.0-stable 1.2-stable trunk; do git checkout -q $b && git rebase mirror/$b; done; git checkout -q $branch"
+    update-tracking = "!git fetch mirror; branch=$(git symbolic-ref --short HEAD); for b in 1.0-stable 1.2-stable 1.4-stable trunk; do git checkout -q $b && git rebase mirror/$b; done; git checkout -q $branch"
     cl = clean -xdf --exclude=Makefile.cfg
 [color "diff"]
     whitespace = red reverse

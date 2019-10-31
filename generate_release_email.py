@@ -22,8 +22,8 @@ descriptions = {
 }
 
 anchors = {
-    'maintenance': 'PreviousStableRelease',
-    'stable': 'LatestStableRelease',
+    'maintenance': 'Trac10StableRelease',
+    'stable': 'Trac12StableRelease',
     'dev': 'LatestDevRelease',
 }
 

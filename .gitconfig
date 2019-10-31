@@ -20,6 +20,12 @@
 	cp = cherry-pick
 	cpx = cherry-pick -x
 	st = status -sb
+	rec = rebase --continue
+	rea = rebase --abort
+	rem = rebase master
+	rei = rebase --interactive --autosquash
+	rhh = reset --hard HEAD
+	reim = rei master~1
 	logo = log --oneline
 	logf = log --first-parent
 	logg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
