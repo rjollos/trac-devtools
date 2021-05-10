@@ -1,29 +1,23 @@
 #!/usr/bin/env python
 
 import argparse
+import pkg_resources
 import sys
 import textwrap
 import urllib2
 
-
-files = (
-    'Trac-%s.tar.gz',
-    'Trac-%s-py2-none-any.whl',
-    'Trac-%s.win32.exe',
-    'Trac-%s.win-amd64.exe',
-)
 
 base_url = 'https://download.edgewall.org/trac'
 
 descriptions = {
     'maintenance': 'latest maintenance release for the older stable branch',
     'stable': 'latest maintenance release for the current stable branch',
-    'dev': 'latest development release leading up to Trac 1.4',
+    'dev': 'latest development release leading up to Trac 1.6',
 }
 
 anchors = {
-    'maintenance': 'Trac10StableRelease',
-    'stable': 'Trac12StableRelease',
+    'maintenance': 'Trac12StableRelease',
+    'stable': 'Trac14StableRelease',
     'dev': 'LatestDevRelease',
 }
 
@@ -61,7 +55,7 @@ Acknowledgements
 
 Many thanks to the growing number of people who have, and continue to,
 support the project. Also our thanks to all people providing feedback
-and bug reports that helps us make Trac better, easier to use and
+and bug reports that help us make Trac better, easier to use and
 more effective. Without your invaluable help, Trac would not evolve.
 Thank you all.
 
@@ -77,6 +71,16 @@ Please let us know.
 
 
 def main(version, release):
+
+    py2 = pkg_resources.parse_version(version) \
+          < pkg_resources.parse_version('1.5.2')
+
+    files = (
+        'Trac-%s.tar.gz',
+        'Trac-%s-py{0}-none-any.whl'.format(2 if py2 else 3),
+        'Trac-%s.win32.exe',
+        'Trac-%s.win-amd64.exe',
+    )
 
     def try_open(u):
         try:
