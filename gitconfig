@@ -1,0 +1,30 @@
+[alias]
+	b = branch
+	bd = branch -d
+	bdd = branch -D
+	ca = commit -a
+	caa = commit -a --amend
+	cp = cherry-pick
+	cpa = cherry-pick --abort
+	cpc = cherry-pick --continue
+	cpx = cherry-pick -m1 -x
+	co = checkout
+	jg = jump grep
+	jm = jump merge
+	logo = log --oneline
+	rea = rebase --abort
+	rec = rebase --continue
+	rei = rebase -i
+	rhh = reset --hard HEAD
+	sfp = show --first-parent
+	st = status
+	sti = status --ignored
+[user]
+	name = Ryan J Ollos
+	email = ryanollos@verasonics.com
+[push]
+	default = simple
+[grep]
+	extendedRegexp = true
+[pull]
+	rebase = true

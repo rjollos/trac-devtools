@@ -16,11 +16,11 @@ highlight BadWhitespace ctermbg=red guibg=darkred
 
 "Strip trailing whitespace
 "http://vim.wikia.com/wiki/Remove_unwanted_spaces#Automatically_removing_all_trailing_whitespace
-autocmd FileType html,javascript,python,css,matlab,rst
+autocmd FileType html,javascript,python,css,matlab,rst,perl
     \ autocmd BufWritePre <buffer> :%s/\s\+$//e
 
 "Python indentation and whitespace
-au FileType python,matlab
+au FileType python,matlab,perl
     \ setlocal tabstop=4 softtabstop=4 shiftwidth=4 textwidth=79
     \ expandtab autoindent fileformat=unix
     \| match BadWhitespace /\s\+$/
@@ -41,6 +41,7 @@ cnoremap <expr> %%  getcmdtype() == ':' ? expand('%:h').'/' : '%%'
 cnoremap w!! execute 'silent! write !sudo tee % >/dev/null' <bar> edit!
 
 "Maintain undo history between sessions
+"The undo directory must be created: mkdir ~/.vim/undodir
 set undofile
 set undodir=~/.vim/undodir
 
